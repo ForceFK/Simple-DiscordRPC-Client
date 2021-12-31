@@ -1,0 +1,66 @@
+﻿<Window x:Class="DiscordRPC.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:src"
+        mc:Ignorable="d"
+        Title="Simple DiscordRPC Client" Height="405" Width="800" MinWidth="800" MinHeight="405" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Closing="Window_Closing">
+    <Grid>
+        <Grid x:Name="Grid_Head" HorizontalAlignment="Center" Height="54" VerticalAlignment="Top" Width="398" Margin="198,0">
+            <Label Content="ApplicationID:" HorizontalAlignment="Left" Margin="10,7,0,10"/>
+            <TextBox x:Name="TXT_ApplicationID" HorizontalAlignment="Left" Height="23" Margin="99,9,0,22" TextWrapping="Wrap" Width="209" VerticalContentAlignment="Center" TextChanged="TXT_ApplicationID_TextChanged"/>
+            <Button x:Name="Btn_SaveAppID" Content="Salvar" HorizontalAlignment="Left" Margin="313,8,0,22" VerticalAlignment="Center" Width="75" Height="24" Click="Btn_SaveAppID_Click" IsDefault="True"/>
+            <TextBlock HorizontalAlignment="Center" Margin="99,31,90,0" VerticalAlignment="Top" Width="209" FontSize="10" Height="13" Cursor="Arrow" >
+                <Hyperlink NavigateUri="https://discord.com/developers/applications"  RequestNavigate="Hyperlink_RequestNavigate">
+                    https://discord.com/developers/applications
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+        <Grid x:Name="Grid_Button" HorizontalAlignment="Center" Height="43" VerticalAlignment="Bottom" Width="396" Margin="0">
+            <Button x:Name="Btn_StartClose" Content="Iniciar" HorizontalAlignment="Center" Margin="0,10" VerticalAlignment="Center" Width="101" Height="23" Click="Btn_StartClose_Click" IsEnabled="False"/>
+        </Grid>
+        <Grid Margin="10,41,10,43">
+            <GroupBox Header="Informações básicas" Height="100" Width="402" Margin="11,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Grid Margin="0" VerticalAlignment="Center">
+                    <Label Content="Details:" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top" Width="45"/>
+                    <TextBox x:Name="TXT_Details" Margin="62,10,5,44" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_Details_LostFocus"/>
+                    <Label Content="State:" HorizontalAlignment="Left" Margin="7,42,0,0" VerticalAlignment="Top" Width="37"/>
+                    <TextBox x:Name="TXT_State" Margin="62,45,5,9" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_State_LostFocus"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Imagens" Height="165" Width="402" Margin="11,115,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Grid Margin="0">
+                    <Label Content="LargeImgKey:" HorizontalAlignment="Left" Margin="7,9,0,107" VerticalAlignment="Center" Width="85"/>
+                    <TextBox x:Name="TXT_LargeImgKey" Margin="92,9,5,110" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_LargeImgKey_LostFocus"/>
+                    <Label Content="LargeImgText:" HorizontalAlignment="Left" Margin="7,46,0,70" VerticalAlignment="Center" Width="85"/>
+                    <TextBox x:Name="TXT_LargeImgText" Margin="92,44,5,75" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_LargeImgKey_LostFocus"/>
+                    <Label Content="SmallImgKey:" HorizontalAlignment="Left" Margin="7,78,0,38" VerticalAlignment="Center" Width="85"/>
+                    <TextBox x:Name="TXT_SmallImgKey" Margin="92,78,5,41" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_SmallImgKey_LostFocus"/>
+                    <Label Content="SmallImgText:" HorizontalAlignment="Left" Margin="7,113,0,3" VerticalAlignment="Center" Width="85" RenderTransformOrigin="0.486,0.538"/>
+                    <TextBox x:Name="TXT_SmallImgText" Margin="92,113,5,6" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_SmallImgKey_LostFocus"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Header="Botões" Margin="418,10,0,0" Height="270" Width="345" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Grid Margin="10,1,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <CheckBox x:Name="CheckBox_Button1" Content="Enable" HorizontalAlignment="Left" Margin="257,85,0,0" VerticalAlignment="Top" Checked="CheckBox_Button1_Checked" Unchecked="CheckBox_Button1_Checked"/>
+                    <Label Content="Label:" HorizontalAlignment="Left" Margin="10,22,0,0" VerticalAlignment="Top" Width="42"/>
+                    <TextBox x:Name="TXT_Button1Label" Margin="52,22,11,78" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_Button1Label_LostFocus"/>
+                    <Label Content="Url:" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Width="29"/>
+                    <TextBox x:Name="TXT_Button1Url" Margin="52,57,11,43" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" LostFocus="TXT_Button1Label_LostFocus"/>
+                    <CheckBox x:Name="CheckBox_Button2" Content="Enable" HorizontalAlignment="Left" Margin="258,86,0,0" VerticalAlignment="Top" Grid.Row="1" Unchecked="CheckBox_Button2_Unchecked" Checked="CheckBox_Button2_Unchecked"/>
+                    <Label Content="Label:" HorizontalAlignment="Left" Margin="11,23,0,0" VerticalAlignment="Top" Width="42" Grid.Row="1"/>
+                    <TextBox x:Name="TXT_Button2Label" Margin="53,23,10,77" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" Grid.Row="1" LostFocus="TXT_Button2Label_LostFocus"/>
+                    <Label Content="Url:" HorizontalAlignment="Left" Margin="11,55,0,0" VerticalAlignment="Top" Width="29" Grid.Row="1"/>
+                    <TextBox x:Name="TXT_Button2Url" Margin="53,58,10,42" TextWrapping="Wrap" VerticalContentAlignment="Center" Height="23" VerticalAlignment="Center" Grid.Row="1" LostFocus="TXT_Button2Label_LostFocus"/>
+                    <Border BorderBrush="#FFD5DFE5" BorderThickness="1" HorizontalAlignment="Left" Height="2" VerticalAlignment="Top" Width="323" Margin="0,122,0,0" Grid.RowSpan="2"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+
+    </Grid>
+</Window>
