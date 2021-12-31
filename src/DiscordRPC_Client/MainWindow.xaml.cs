@@ -48,7 +48,7 @@ namespace DiscordRPC
             else
             {
                 //Vamos inicar uma instancia do DiscordPresenceTask passando o applicationID
-                discordPresence = discordPresence ?? new DiscordPresenceTask(ulong.Parse(_applicationID));
+                discordPresence = new DiscordPresenceTask(ulong.Parse(_applicationID));
 
                 //Incializar o cliente DiscordRPC para se conectar ao discord.
                 await discordPresence.Start();
