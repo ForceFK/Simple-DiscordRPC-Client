@@ -2,21 +2,18 @@
  * Arquivo: SettingsManager.cs
  * Criado em: 31-12-2021
  * https://github.com/ForceFK
- * Última modificação: 31-12-2021
+ * Última modificação: 23-08-2024
  */
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace DiscordRPC.Config
 {
     public static class SettingsManager
     {
-        internal static void Save(this SettingsModel set) 
+        internal static void Save(this SettingsModel set)
             => File.WriteAllText(Environment.CurrentDirectory + @"\Settings.json", JsonConvert.SerializeObject(set, Formatting.Indented));
 
         internal static Task Load(MainWindow main, out SettingsModel st)
@@ -43,6 +40,8 @@ namespace DiscordRPC.Config
                 main.buttons[1] = st.Button_2;
                 main.CheckBox_Button1.IsChecked = st.Button_1_Enable;
                 main.CheckBox_Button2.IsChecked = st.Button_2_Enable;
+
+                main.CheckBox_Timestamps.IsChecked = st.ShowTimestamps;
 
             }
             else

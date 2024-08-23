@@ -2,14 +2,8 @@
  * Arquivo: SettingsModel.cs
  * Criado em: 31-12-2021
  * https://github.com/ForceFK
- * Última modificação: 31-12-2021
+ * Última modificação: 23-08-2024
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DiscordRPC.Config
 {
     public class SettingsModel
@@ -25,5 +19,6 @@ namespace DiscordRPC.Config
         public Button Button_1 { get; set; }
         public bool? Button_2_Enable { get; set; }
         public Button Button_2 { get; set; }
+        public bool ShowTimestamps { get; set; }
     }
 }

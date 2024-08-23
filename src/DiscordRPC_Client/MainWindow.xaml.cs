@@ -2,12 +2,12 @@
  * Arquivo: MainWindow.xaml.cs
  * Criado em: 24-12-2021
  * https://github.com/ForceFK
- * Última modificação: 31-12-2021
+ * Última modificação: 23-08-2024
  */
 using DiscordRPC.Config;
 using DiscordRPC.Tasks;
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,9 +23,9 @@ namespace DiscordRPC
     public partial class MainWindow : Window
     {
         private DiscordPresenceTask discordPresence;
-        internal List<Button> buttons = new List<Button> { null, null };
+        internal readonly Button[] buttons = new Button[] { null, null };
         private SettingsModel settigns;
-    
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,30 +34,30 @@ namespace DiscordRPC
         /// <summary>
         /// Botão Iniciar/Parar
         /// </summary>
-        private async void Btn_StartClose_Click(object sender, RoutedEventArgs e)
+        private async void Btn_StartStop_Click(object sender, RoutedEventArgs e)
         {
-            Btn_StartClose.IsEnabled = false;
+            Btn_StartStop.IsEnabled = false;
 
             //Se o cliente já está inicializado, vamos parar ou poderá ocorrer erros caso iniciar mais de um
             if (discordPresence != null && discordPresence.IsInitialized)
             {
                 await discordPresence.Stop();
 
-                Btn_StartClose.Content = "Iniciar";
+                Btn_StartStop.Content = "Start";
                 Grid_Head.IsEnabled = true;
             }
             else
             {
-                //Vamos inicar uma instancia do DiscordPresenceTask passando o applicationID
+                //Vamos inciar uma instancia do DiscordPresenceTask passando o applicationID
                 discordPresence = new DiscordPresenceTask(ulong.Parse(settigns.ApplicationID));
 
-                //Incializar o cliente DiscordRPC para se conectar ao discord.
+                //Inicializar o cliente DiscordRPC para se conectar ao discord.
                 await discordPresence.Start();
 
-                Btn_StartClose.Content = "Parar";
+                Btn_StartStop.Content = "Stop";
                 Grid_Head.IsEnabled = false;
 
-                //Criamos o presence com os label e definimos no cliente
+                //Criamos o presence com os labels e definimos no cliente
                 //Para mais duvida consulte o painel de desenvolvedor do discord
                 await discordPresence.SetPresence(new RichPresence
                 {
@@ -70,26 +70,25 @@ namespace DiscordRPC
                         SmallImageKey = TXT_SmallImgKey.Text,
                         SmallImageText = TXT_SmallImgText.Text
                     },
-                    //Maximo de botões no presence é 2
+
+                    //Máximo de botões no presence é 2
                     //Pegamos a lista de botões, ignorando os valores nulos e convertemos em array
                     Buttons = buttons.Where(x => x != null).ToArray(),
 
                     //Tempo crescente no presence
-                    Timestamps = Timestamps.Now
+                    Timestamps = CheckBox_Timestamps.IsChecked.GetValueOrDefault() ? Timestamps.Now : null
                 });
-
-
             }
-            Btn_StartClose.Focus();
+            Btn_StartStop.Focus();
             await Task.Delay(20);
-            Btn_StartClose.IsEnabled = true;
+            Btn_StartStop.IsEnabled = true;
         }
 
 
         /// <summary>
         /// Desconectar o clienteRPC no fechamento do form
         /// </summary>
-        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void Window_Closing(object sender, CancelEventArgs e)
         {
             if (discordPresence != null)
                 await discordPresence?.Stop();
@@ -101,17 +100,17 @@ namespace DiscordRPC
         {
             if (TXT_ApplicationID.Text.Length == 0)
             {
-                Btn_StartClose.IsEnabled = false;
+                Btn_StartStop.IsEnabled = false;
             }
             else
             {
                 if (TXT_ApplicationID.Text.Length <= 5)
                 {
-                    MessageBox.Show("Application ID inválido!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Invalid ApplicationID!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                Btn_StartClose.IsEnabled = true;
+                Btn_StartStop.IsEnabled = true;
             }
             settigns.ApplicationID = TXT_ApplicationID.Text;
             Btn_SaveAppID.IsEnabled = false;
@@ -194,7 +193,7 @@ namespace DiscordRPC
                 }
                 else if (TXT_Button1Url.Text.Length > 4)
                     settigns.Button_1 = new Button { Label = TXT_Button1Label.Text, Url = TXT_Button1Url.Text };
-            
+
                 if ((settigns.Button_1_Enable = CheckBox_Button1.IsChecked).GetValueOrDefault() && TXT_Button1Url.Text.Length > 4)
                     buttons[0] = settigns.Button_1;
                 else
@@ -213,7 +212,7 @@ namespace DiscordRPC
             {
                 settigns.Button_1_Enable = CheckBox_Button1.IsChecked = false;
                 settigns.Save();
-                MessageBox.Show(ex.Message, "Botão 01", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Button 01", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -248,22 +247,40 @@ namespace DiscordRPC
             {
                 settigns.Button_2_Enable = CheckBox_Button2.IsChecked = false;
                 settigns.Save();
-                MessageBox.Show(ex.Message, "Botão 02", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Button 02", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void CheckBox_Button1_Checked(object sender, RoutedEventArgs e)
         {
             TXT_Button1Label.Focus();
-            Btn_StartClose.Focus();
+            Btn_StartStop.Focus();
         }
 
         private void CheckBox_Button2_Unchecked(object sender, RoutedEventArgs e)
         {
             TXT_Button2Label.Focus();
-            Btn_StartClose.Focus();
+            Btn_StartStop.Focus();
         }
-        
+
+
+        private async void CheckBox_Timestamps_Checked(object sender, RoutedEventArgs e)
+        {
+            settigns.ShowTimestamps = true;
+            settigns.Save();
+            if ((discordPresence?.IsInitialized).GetValueOrDefault())
+                await discordPresence.UpdateTime(true);
+
+        }
+
+        private async void CheckBox_Timestamps_Unchecked(object sender, RoutedEventArgs e)
+        {
+            settigns.ShowTimestamps = false;
+            settigns.Save();
+            if ((discordPresence?.IsInitialized).GetValueOrDefault())
+                await discordPresence.UpdateTime(false);
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             SettingsManager.Load(this, out settigns);
@@ -278,10 +295,9 @@ namespace DiscordRPC
             if (TXT_ApplicationID.Text.Length > 5 && settigns.ApplicationID == TXT_ApplicationID.Text)
             {
                 Btn_SaveAppID.IsEnabled = false;
-                Btn_StartClose.IsEnabled = true;
+                Btn_StartStop.IsEnabled = true;
             }
         }
         #endregion
-
     }
 }

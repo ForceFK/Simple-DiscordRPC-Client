@@ -2,7 +2,7 @@
  * Arquivo: DiscordPresenceTask.cs
  * Criado em: 24-12-2021
  * https://github.com/ForceFK
- * Última modificação: 30-12-2021
+ * Última modificação: 23-08-2024
  */
 using System;
 using System.Runtime.InteropServices;
@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace DiscordRPC.Tasks
 {
-    
-    //Para mais informações, acesse: https://github.com/Lachee/discord-rpc-csharp
+    //Para mais informações, acesse: https://lachee.github.io/discord-rpc-csharp
     public class DiscordPresenceTask
     {
         internal DiscordRpcClient ClientRPC;
@@ -34,7 +33,6 @@ namespace DiscordRPC.Tasks
         /// <returns></returns>
         internal Task Start()
         {
-            //thread safe
             lock (ClientRPC)
             {
                 if (ApplicationID <= 0)
@@ -43,11 +41,11 @@ namespace DiscordRPC.Tasks
                 }
 
 
-                if(ClientRPC.IsDisposed)
+                if (ClientRPC.IsDisposed)
                     ClientRPC = new DiscordRpcClient(ApplicationID.ToString());
 
-                
-                // Initialize
+
+                //Inicializar RPC
                 if (!ClientRPC.Initialize())
                 {
                     throw new Exception("ClientRPC.Initialize error.");
@@ -91,9 +89,7 @@ namespace DiscordRPC.Tasks
             CurrentPresence = richPresence ?? CurrentPresence;
 
             if (CurrentPresence != null && IsInitialized)
-            {
-                ClientRPC?.SetPresence(CurrentPresence);
-            }
+                ClientRPC.SetPresence(CurrentPresence);
 
             return Task.CompletedTask;
         }
@@ -122,14 +118,12 @@ namespace DiscordRPC.Tasks
         /// <summary>
         /// Atualiza os botões do RichPresence
         /// </summary>
-        /// <param name="btns">Novos botões, não pode conter valores null</param>
+        /// <param name="btns">Novos botões</param>
         /// <returns></returns>
         internal Task UpdateDefaultButtons(Button[] btns)
         {
             lock (CurrentPresence)
-            {
                 CurrentPresence.Buttons = btns;
-            }
 
             return SetPresence();
         }
@@ -139,9 +133,7 @@ namespace DiscordRPC.Tasks
             if (ClientRPC != null && !ClientRPC.IsDisposed && ClientRPC.IsInitialized)
             {
                 lock (ClientRPC)
-                {
-                    CurrentPresence = ClientRPC?.UpdateLargeAsset(key, text);
-                }
+                    CurrentPresence = ClientRPC.UpdateLargeAsset(key, text);
             }
 
             return Task.CompletedTask;
@@ -152,9 +144,7 @@ namespace DiscordRPC.Tasks
             if (ClientRPC != null && !ClientRPC.IsDisposed && ClientRPC.IsInitialized)
             {
                 lock (ClientRPC)
-                {
-                    CurrentPresence = ClientRPC?.UpdateSmallAsset(key, text);
-                }
+                    CurrentPresence = ClientRPC.UpdateSmallAsset(key, text);
             }
 
             return Task.CompletedTask;
@@ -165,9 +155,7 @@ namespace DiscordRPC.Tasks
             if (ClientRPC != null && !ClientRPC.IsDisposed && ClientRPC.IsInitialized)
             {
                 lock (ClientRPC)
-                {
-                    CurrentPresence = ClientRPC?.UpdateDetails(value);
-                }
+                    CurrentPresence = ClientRPC.UpdateDetails(value);
             }
 
             return Task.CompletedTask;
@@ -178,8 +166,22 @@ namespace DiscordRPC.Tasks
             if (ClientRPC != null && !ClientRPC.IsDisposed && ClientRPC.IsInitialized)
             {
                 lock (ClientRPC)
+                    CurrentPresence = ClientRPC.UpdateState(value);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        internal Task UpdateTime(bool show)
+        {
+            if (ClientRPC != null && !ClientRPC.IsDisposed && ClientRPC.IsInitialized)
+            {
+                lock (ClientRPC)
                 {
-                    CurrentPresence = ClientRPC?.UpdateState(value);
+                    if (show)
+                        CurrentPresence = ClientRPC.UpdateStartTime();
+                    else
+                        CurrentPresence = ClientRPC.UpdateClearTime();
                 }
             }
 

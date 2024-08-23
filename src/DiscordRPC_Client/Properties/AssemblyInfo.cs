@@ -1,12 +1,4 @@
-﻿/*
- * Arquivo: AssemblyInfo.cs
- * Criado em: 24-12-2021
- * https://github.com/ForceFK
- * Última modificação: 24-12-2021
- */
 using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -57,5 +49,5 @@ using System.Windows;
 // É possível especificar todos os valores ou usar como padrão os Números de Build e da Revisão
 // usando o "*" como mostrado abaixo:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2022.0101.0116.104")]
+[assembly: AssemblyVersion("2024.0823.0756.124")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
