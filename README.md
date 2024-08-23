@@ -2,4 +2,4 @@
 
 >Crie seu aplicativo em: http://discord.com/developers/applications/
 
-![Alt text](https://i.imgur.com/vcJSd9P.png "Screenshot")
+![Alt text](https://i.imgur.com/GDOXZW1.png "Screenshot")
