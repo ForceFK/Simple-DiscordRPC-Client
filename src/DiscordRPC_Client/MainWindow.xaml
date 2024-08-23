@@ -122,7 +122,7 @@
                         </Grid>
                     </Grid>
                 </GroupBox>
-                <GroupBox Header="Timer" Height="39">
+                <GroupBox Header="Time" Height="39">
                     <CheckBox x:Name="CheckBox_Timestamps" Content="Show Timestamps" VerticalAlignment="Center" Margin="5,0" Checked="CheckBox_Timestamps_Checked" Unchecked="CheckBox_Timestamps_Unchecked"/>
                 </GroupBox>
             </StackPanel>
